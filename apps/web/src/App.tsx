@@ -12,7 +12,8 @@ import { RecipesPage } from "./pages/RecipesPage";
 import { ShoppingPage } from "./pages/ShoppingPage";
 import { buildShoppingDiff, normalizeNumber, recipeScore, scaleQty } from "./lib/planner";
 import { requestMealPlan } from "./services/mealPlanApi";
-import type { Preferences, Recipe, WeekPlan } from "./types";
+import { getISOWeek, kwLabel } from "./lib/week";
+import type { Preferences, Recipe, SavedWeek, WeekPlan } from "./types";
 
 const defaultPreferences: Preferences = {
   season: "Frühling",
@@ -132,6 +133,9 @@ function AuthenticatedApp() {
   const [plan, setPlan] = useState<WeekPlan>(() => buildPlanFromRecipes([], 5));
   const [assistantPrompt, setAssistantPrompt] = useState("Frühlingsküche, familienfreundlich, 5 Menüs, möglichst viel Gemüse.");
   const [pantryItems, setPantryItems] = useState<Record<string, boolean>>({ Salz: true, Pfeffer: true, Olivenöl: true });
+  const [savedWeeks, setSavedWeeks] = useState<SavedWeek[]>(() => {
+    try { return JSON.parse(localStorage.getItem("meal-planner-saved-weeks") ?? "[]"); } catch { return []; }
+  });
   const [shoppingDiff, setShoppingDiff] = useState<{ day: string; fromRecipe: Recipe | null; toRecipe: Recipe | null; changes: ReturnType<typeof buildShoppingDiff> } | null>(null);
   const [activeRecipeId, setActiveRecipeId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -275,6 +279,38 @@ function AuthenticatedApp() {
     setMealCountDraft(Math.max(1, Math.min(7, value)));
   };
 
+  const handleSaveWeek = () => {
+    if (plannedRecipes.length === 0) return;
+    const { kw, year } = getISOWeek();
+    const newWeek: SavedWeek = {
+      id: `${year}-${kw}-${Date.now()}`,
+      kw,
+      year,
+      label: kwLabel(kw, year),
+      savedAt: new Date().toISOString(),
+      entries: plannedRecipes.map(({ day, recipe }) => ({
+        day,
+        recipeId: recipe.id,
+        recipeTitle: recipe.title,
+        category: recipe.category,
+        time: recipe.time,
+      })),
+    };
+    setSavedWeeks((prev) => {
+      const updated = [newWeek, ...prev.filter((w) => w.id !== newWeek.id)];
+      localStorage.setItem("meal-planner-saved-weeks", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
+  const handleDeleteSavedWeek = (id: string) => {
+    setSavedWeeks((prev) => {
+      const updated = prev.filter((w) => w.id !== id);
+      localStorage.setItem("meal-planner-saved-weeks", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   return (
     <>
       <RecipeModal recipe={activeRecipe} people={people} onClose={() => setActiveRecipeId(null)} />
@@ -304,7 +340,7 @@ function AuthenticatedApp() {
             }
           />
           <Route path="/" element={<PlannerPage mealCount={mealCount} plan={plan} filteredRecipes={filteredRecipes} shoppingDiff={shoppingDiff} summary={summary} handleAssignRecipe={handleAssignRecipe} handleGenerateRecipeForDay={handleGenerateRecipeForDay} generatingDay={generatingDay} setActiveRecipeId={setActiveRecipeId} />} />
-          <Route path="/recipes" element={<RecipesPage plannedRecipes={plannedRecipes} activeDays={activeDays} handleAssignRecipe={handleAssignRecipe} setActiveRecipeId={setActiveRecipeId} />} />
+          <Route path="/recipes" element={<RecipesPage plannedRecipes={plannedRecipes} activeDays={activeDays} handleAssignRecipe={handleAssignRecipe} setActiveRecipeId={setActiveRecipeId} onSaveWeek={handleSaveWeek} savedWeeks={savedWeeks} onDeleteSavedWeek={handleDeleteSavedWeek} />} />
           <Route path="/shopping" element={<ShoppingPage pantryItems={pantryItems} setPantryItems={(fn) => setPantryItems(fn)} shoppingData={shoppingData} onExport={() => downloadText("wocheneinkauf-coop.txt", exportText)} />} />
           <Route path="*" element={<Navigate to="/start" replace />} />
         </Routes>

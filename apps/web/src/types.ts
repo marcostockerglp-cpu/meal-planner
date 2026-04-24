@@ -41,6 +41,23 @@ export type Preferences = {
   variety: boolean;
 };
 
+export type SavedWeekEntry = {
+  day: string;
+  recipeId: string;
+  recipeTitle: string;
+  category: Category;
+  time: number;
+};
+
+export type SavedWeek = {
+  id: string;
+  kw: number;
+  year: number;
+  label: string;
+  savedAt: string;
+  entries: SavedWeekEntry[];
+};
+
 export type ShoppingDiffItem = {
   key: string;
   name: string;
