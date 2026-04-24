@@ -2,7 +2,6 @@ import OpenAI from "openai";
 import { z } from "zod";
 import { env } from "./env.js";
 import { buildMealPlanPrompt } from "./prompt.js";
-import { buildSafetyIdentifier } from "./safetyIdentifier.js";
 import type { MealPlanResponse } from "../types.js";
 
 const MealPlanSchema = z.object({
