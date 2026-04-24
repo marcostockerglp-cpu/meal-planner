@@ -1,0 +1,969 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&family=Playfair+Display:wght@700&display=swap");
+
+:root {
+  --primary: #FF6B35;
+  --primary-soft: #FF9A76;
+  --primary-dark: #CC4E27;
+  --secondary: #2E8B57;
+  --secondary-soft: #6FBF8F;
+  --background: #FFF8F3;
+  --surface: #FFFFFF;
+  --surface-alt: #FFF1E8;
+  --border: #E8E1DC;
+  --text-primary: #2B2B2B;
+  --text-secondary: #6B6B6B;
+  --success: #4CAF50;
+  --warning: #FFB300;
+  --error: #E53935;
+  --breakfast: #FFE0B2;
+  --lunch: #C8E6C9;
+  --dinner: #FFCCBC;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+  --shadow-card: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-soft: 0 10px 30px rgba(43,43,43,0.06);
+}
+
+/* ── Login Page ─────────────────────────────────────────────────────────── */
+.loginPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #FFF1E8 0%, #FFF8F3 60%, #ffeee3 100%);
+  padding: 24px;
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 64px rgba(43,43,43,0.10);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.loginBrand { text-align: center; }
+.loginBrandKicker {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.loginBrandName {
+  font-family: Poppins, sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 4px;
+}
+
+.loginDivider {
+  height: 1px;
+  background: var(--border);
+}
+
+.loginBody { display: flex; flex-direction: column; gap: 16px; }
+.loginTitle {
+  font-family: Poppins, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  text-align: center;
+}
+.loginSubtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  text-align: center;
+  margin: 0;
+}
+
+.loginGoogleBtn {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  gap: 10px;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+.loginGoogleBtn:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(43,43,43,0.12);
+  transform: translateY(-1px);
+}
+
+.loginError {
+  font-size: 13px;
+  color: var(--error);
+  text-align: center;
+  margin: 0;
+}
+
+.loginFooter {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.loginSpinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+/* ── User Chip in Header ────────────────────────────────────────────────── */
+.userChip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px 5px 5px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  flex-shrink: 0;
+}
+
+.userAvatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.userAvatarFallback {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.userDisplayName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.userSignOut {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+.userSignOut:hover { color: var(--error); background: #fff4f2; }
+
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: Inter, system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+a, button, input, textarea, select { font: inherit; }
+
+.appShell { min-height: 100vh; }
+.container { max-width: 1240px; margin: 0 auto; padding: 0 16px 100px; }
+.pageWithBottomNav { padding-bottom: 104px; }
+.pageSection { margin-top: 18px; }
+
+.eyebrow,
+.brandKicker {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.brandText {
+  font-family: Poppins, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.heroTitle,
+.plannerTitle,
+.plannerHeroTitle,
+.modalTitle {
+  font-family: Poppins, sans-serif;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+}
+
+.heroTitle { margin: 0; font-size: 32px; line-height: 1.1; }
+.plannerLead,
+.heroText,
+.panelText,
+.tinyText,
+.metricHint,
+.assistantSummaryText,
+.cookTipText,
+.infoLabel {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.stickyTopNav {
+  position: sticky;
+  top: 12px;
+  z-index: 40;
+  margin-top: 18px;
+}
+
+.plannerHeader {
+  background: rgba(255,248,243,0.9);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.plannerHeaderInner {
+  min-height: 72px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 18px;
+}
+
+.plannerNav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.plannerNavLink,
+.bottomTab {
+  text-decoration: none;
+  color: var(--text-secondary);
+  padding: 10px 14px;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+}
+
+.plannerNavLinkActive,
+.bottomTabActive {
+  background: var(--surface);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-card);
+}
+
+.heroPlanner {
+  margin-top: 18px;
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, #FFF1E8 0%, #FFF8F3 100%);
+  border: 1px solid var(--border);
+  display: grid;
+  gap: 20px;
+}
+
+.plannerHeroTitle {
+  max-width: 760px;
+  margin-top: 6px;
+}
+
+.plannerHeroText { max-width: 720px; }
+
+.heroParamRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.heroParamCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  box-shadow: var(--shadow-card);
+}
+
+.heroParamLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stepControl {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stepBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
+  color: var(--text-primary);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.stepBtn:hover:not(:disabled) { background: var(--border); }
+.stepBtn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Inactive day panel */
+.panelInactive { opacity: 0.45; }
+
+/* Empty state */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  gap: 14px;
+}
+.emptyStateIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+.emptyStateTitle {
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+.emptyStateText {
+  font-size: 14px;
+  color: var(--text-secondary);
+  max-width: 300px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Error card in loading area */
+.errorCard { border-color: #f5d7cf; }
+
+.stepValue {
+  font-size: 15px;
+  font-weight: 700;
+  min-width: 48px;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.softPill,
+.badge,
+.chip,
+.glassPill,
+.dayPill,
+.amountBadge,
+.deltaBadge,
+.previewCountBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+.badgeDay { background: var(--surface-alt); }
+.softChip { background: var(--surface-alt); cursor: pointer; }
+
+.mealChip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+}
+.mealChip--vegetarisch { background: var(--lunch); color: var(--text-primary); }
+.mealChip--fleisch { background: var(--dinner); color: var(--text-primary); }
+.mealChip--fisch { background: var(--breakfast); color: var(--text-primary); }
+
+.heroStats,
+.topGrid,
+.sectionGrid,
+.shoppingGrid,
+.recipeGrid,
+.statsGrid,
+.diffGrid,
+.buttonGrid,
+.stack,
+.stackLarge,
+.planningControlGrid {
+  display: grid;
+  gap: 16px;
+}
+
+.heroStatsWarm {
+  grid-template-columns: repeat(3, minmax(0,1fr));
+}
+
+.statWarmCard,
+.statCard,
+.panel,
+.recipeCard,
+.shoppingItem,
+.toggleCard,
+.listItem,
+.stepCard,
+.notice,
+.modal,
+.drawer,
+.infoCard,
+.metricCard,
+.assistantSummaryCard,
+.stepModeIngredients,
+.errorBanner {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+.statWarmCard,
+.statCard,
+.panel,
+.recipeCard,
+.shoppingItem,
+.modal,
+.drawer {
+  border-radius: var(--radius-lg);
+}
+
+.panel,
+.recipeCard { padding: 16px; }
+.statWarmCard,
+.statCard,
+.shoppingItem { padding: 18px; }
+
+.statWarmCard span,
+.statCard span {
+  display: block;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.statWarmCard strong,
+.statCard strong {
+  display: block;
+  margin-top: 6px;
+  font-family: Poppins, sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.panelHeader { display: grid; gap: 6px; margin-bottom: 12px; }
+.panelTitle,
+.sectionTitle,
+.listItemTitle,
+.recipeName,
+.dayTitle,
+.metricTitle,
+.cookTipTitle,
+.assistantSummaryTitle {
+  color: var(--text-primary);
+}
+.panelTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Poppins, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+}
+.recipeName {
+  font-family: Poppins, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.textarea,
+.select {
+  width: 100%;
+  min-height: 50px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--text-primary);
+}
+.textarea { min-height: 118px; resize: vertical; }
+
+.rangeInput {
+  width: 100%;
+  accent-color: var(--primary);
+}
+
+.button {
+  min-height: 48px;
+  padding: 12px 18px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+.button:hover { transform: translateY(-1px); }
+.button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.buttonPrimary {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+.buttonSecondary {
+  background: var(--surface);
+  color: var(--text-primary);
+}
+.buttonGhost {
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.metricCard,
+.toggleCard,
+.assistantSummaryCard,
+.stepModeIngredients,
+.infoCard {
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.metricHeader,
+.rowBetween,
+.rowResponsive,
+.dayInfo,
+.recipeTop,
+.badgeRow,
+.chipRow,
+.buttonWrap,
+.modalActions,
+.stepHead,
+.stepModeBottom {
+  display: flex;
+  gap: 12px;
+}
+.rowBetween { justify-content: space-between; align-items: center; }
+.rowResponsive { flex-direction: column; }
+.badgeRow, .chipRow, .buttonWrap { flex-wrap: wrap; }
+
+.metricIcon,
+.recipeIcon,
+.stepBadge,
+.stepModeBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metricIcon,
+.recipeIcon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: var(--surface-alt);
+  color: var(--primary-dark);
+}
+
+.metricValue {
+  margin-left: auto;
+  font-family: Poppins, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.rangeLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.errorBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  color: var(--error);
+  background: #fff4f2;
+}
+
+.dayCard { display: grid; gap: 16px; }
+.dayInfo { align-items: flex-start; }
+.dayText { min-width: 0; }
+.dayTitle {
+  margin-top: 8px;
+  font-family: Poppins, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+}
+.dayMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+.dayActions { display: grid; gap: 10px; }
+
+.ingredientsPreview {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: grid;
+  gap: 8px;
+}
+
+.successNote {
+  border-radius: var(--radius-md);
+  padding: 16px;
+  background: #f5fbf7;
+  border: 1px solid #dcefe2;
+  box-shadow: var(--shadow-card);
+}
+
+.notice {
+  border-radius: var(--radius-md);
+  padding: 14px;
+}
+
+.diffCard {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+.diffCard.add { background: #f5fbf7; border-color: #dcefe2; }
+.diffCard.remove { background: #fff4f2; border-color: #f5d7cf; }
+
+.shoppingList {
+  display: grid;
+  gap: 14px;
+  max-height: 68vh;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(43,43,43,0.28);
+  backdrop-filter: blur(6px);
+  z-index: 60;
+  padding: 12px;
+  overflow: auto;
+}
+
+.modal {
+  margin: 24px auto;
+  max-width: 1200px;
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.modalHeader {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.modalHeaderSticky {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--surface);
+}
+
+.modalBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.modalLead { font-size: 16px; }
+
+.modalInfoGrid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  margin-top: 16px;
+}
+
+.infoValue {
+  margin-top: 6px;
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.modalContent {
+  display: grid;
+}
+
+.modalColumn { padding: 20px; }
+.sectionLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.sectionTitle {
+  margin: 0 0 14px;
+  font-family: Poppins, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.listItemValue {
+  font-family: Poppins, sans-serif;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stepCard {
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.stepBadge {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: white;
+  font-weight: 700;
+}
+
+.stepText {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.cookTipCard {
+  margin-top: 16px;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+}
+
+.stepMode {
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+}
+.stepModeCounter {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.stepModeProgress {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: #f2e8e2;
+  overflow: hidden;
+}
+.stepModeProgressBar {
+  height: 100%;
+  background: var(--primary);
+}
+.stepModeCard {
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+.stepModeBadge {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.stepModeText {
+  margin: 0;
+  font-family: Poppins, sans-serif;
+  font-size: 28px;
+  line-height: 1.5;
+}
+
+.loadingOverlay {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 80;
+}
+.loadingCard {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  max-width: 360px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+.loadingTitle {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.loadingText {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.spin {
+  animation: spin 1s linear infinite;
+  color: var(--primary);
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.bottomTabBar {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  z-index: 50;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 8px;
+  padding: 8px;
+  border-radius: var(--radius-lg);
+  background: rgba(255,248,243,0.94);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+.mobileOnly { display: inline-flex; }
+.desktopOnly { display: none; }
+
+@media (min-width: 640px) {
+  .heroStats,
+  .statsGrid,
+  .diffGrid,
+  .recipeGrid,
+  .buttonGrid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .rowResponsive { flex-direction: row; justify-content: space-between; align-items: center; }
+  .modalHeader { grid-template-columns: 1fr auto; }
+}
+
+@media (min-width: 900px) {
+  .container { padding: 0 24px 28px; }
+  .pageWithBottomNav { padding-bottom: 28px; }
+  .desktopOnly { display: block; }
+  .mobileOnly { display: none; }
+  .topGridPlanner { grid-template-columns: 1.2fr 0.8fr; }
+  .sectionGrid { grid-template-columns: 0.95fr 1.05fr; }
+  .shoppingGrid { grid-template-columns: 0.74fr 1.26fr; }
+  .heroPlanner { grid-template-columns: 1.3fr 0.7fr; align-items: center; }
+  .dayCard { grid-template-columns: 1fr 260px; align-items: center; }
+  .modalContent { grid-template-columns: 0.95fr 1.05fr; }
+  .modalColumn:first-child { border-right: 1px solid var(--border); }
+}
+
+@media (min-width: 1200px) {
+  .recipeGrid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+}
+
+@media (max-width: 700px) {
+  .modalInfoGrid { grid-template-columns: 1fr; }
+  .modalActions { width: 100%; flex-wrap: wrap; }
+  .modalActions .button { flex: 1 1 auto; }
+  .stepModeText { font-size: 22px; }
+}
