@@ -62,7 +62,6 @@ export async function generateMealPlan(input: { prompt: string; mealCount: numbe
     input: buildMealPlanPrompt({ prompt: input.prompt, mealCount: input.mealCount }),
     temperature: 0.7,
     max_output_tokens: 4000,
-    safety_identifier: buildSafetyIdentifier(input.userId),
   });
 
   const rawText = stripCodeFence(extractText(response));
