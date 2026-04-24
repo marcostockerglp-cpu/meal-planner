@@ -120,6 +120,38 @@
   margin: 0;
 }
 
+.loginOrDivider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.loginOrDivider::before,
+.loginOrDivider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.loginGuestBtn {
+  width: 100%;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 13px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.loginGuestBtn:hover {
+  background: var(--surface-alt);
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
 .loginSpinner {
   display: inline-block;
   width: 18px;
@@ -966,4 +998,76 @@ a, button, input, textarea, select { font: inherit; }
   .modalActions { width: 100%; flex-wrap: wrap; }
   .modalActions .button { flex: 1 1 auto; }
   .stepModeText { font-size: 22px; }
+}
+
+/* ── Mobile-first improvements (< 640px) ──────────────────────────────────── */
+@media (max-width: 639px) {
+  /* Spacing */
+  .container { padding: 0 12px 100px; }
+  .pageWithBottomNav { padding-bottom: 108px; }
+  .pageSection { margin-top: 14px; }
+
+  /* Typography */
+  .heroTitle { font-size: 24px; }
+  .plannerTitle { font-size: 22px; }
+  .brandText { font-size: 20px; }
+  .brandKicker { font-size: 12px; }
+  .panelTitle { font-size: 17px; }
+  .recipeName { font-size: 17px; }
+  .sectionTitle { font-size: 16px; }
+
+  /* Header: tighter on mobile */
+  .plannerHeaderInner { padding: 10px 14px; min-height: 60px; gap: 10px; }
+  .stickyTopNav { top: 8px; margin-top: 10px; }
+
+  /* Hero planner section */
+  .heroPlanner { padding: 16px; }
+  .heroParamRow { gap: 8px; }
+  .heroParamCard { padding: 10px 14px; }
+
+  /* Stats grid: 3 cols → 1 col on very small screens */
+  .heroStatsWarm { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; }
+  .statWarmCard { padding: 12px; }
+  .statWarmCard strong { font-size: 22px; }
+  .statWarmCard span { font-size: 12px; }
+
+  /* Panels */
+  .panel { padding: 14px; }
+  .recipeCard { padding: 14px; }
+
+  /* Day cards: stack content vertically */
+  .dayCard { gap: 10px; }
+
+  /* Chips/tags wrapping */
+  .heroParamRow,
+  .tagRow,
+  .plannerNav { flex-wrap: wrap; gap: 6px; }
+
+  /* Buttons: full-width on mobile */
+  .button { min-height: 46px; }
+
+  /* Textarea */
+  .textarea { min-height: 80px; font-size: 15px; }
+
+  /* Shopping grid: always single column */
+  .shoppingGrid { grid-template-columns: 1fr; }
+  .sectionGrid { grid-template-columns: 1fr; }
+
+  /* Modal */
+  .modal { margin: 12px; border-radius: var(--radius-md); }
+  .modalHeaderSticky { padding: 14px 16px; }
+
+  /* Bottom tab bar: slightly bigger touch targets */
+  .bottomTabBar { padding: 6px; gap: 4px; }
+  .bottomTab { padding: 10px 8px; font-size: 12px; }
+
+  /* Step controls: bigger touch targets */
+  .stepBtn { width: 36px; height: 36px; font-size: 18px; }
+
+  /* Loading overlay */
+  .loadingCard { padding: 16px; gap: 12px; }
+
+  /* Planner: action buttons stacked */
+  .dayCardActions { flex-direction: column; gap: 6px; }
+  .dayCardActions .button { width: 100%; }
 }

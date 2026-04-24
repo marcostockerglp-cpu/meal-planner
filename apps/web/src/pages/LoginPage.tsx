@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 export function LoginPage() {
-  const { signInWithGoogle } = useAuth();
+  const { signInWithGoogle, continueAsGuest } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -48,6 +48,14 @@ export function LoginPage() {
           </button>
 
           {error && <p className="loginError">{error}</p>}
+
+          <div className="loginOrDivider">
+            <span>oder</span>
+          </div>
+
+          <button className="button loginGuestBtn" onClick={continueAsGuest}>
+            Als Gast fortfahren
+          </button>
         </div>
 
         <p className="loginFooter">

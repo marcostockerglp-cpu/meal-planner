@@ -15,7 +15,7 @@ type Props = {
 };
 
 export function AppLayout({ children }: Props) {
-  const { user, signOut } = useAuth();
+  const { user, isGuest, signOut } = useAuth();
 
   return (
     <div className="appShell">
@@ -38,9 +38,11 @@ export function AppLayout({ children }: Props) {
                 </NavLink>
               ))}
             </nav>
-            {user && (
+            {(user || isGuest) && (
               <div className="userChip">
-                {user.photoURL ? (
+                {isGuest ? (
+                  <div className="userAvatarFallback">G</div>
+                ) : user?.photoURL ? (
                   <img
                     className="userAvatar"
                     src={user.photoURL}
@@ -49,11 +51,11 @@ export function AppLayout({ children }: Props) {
                   />
                 ) : (
                   <div className="userAvatarFallback">
-                    {(user.displayName ?? user.email ?? "U")[0].toUpperCase()}
+                    {(user?.displayName ?? user?.email ?? "U")[0].toUpperCase()}
                   </div>
                 )}
                 <span className="userDisplayName desktopOnly">
-                  {user.displayName?.split(" ")[0] ?? "Nutzer"}
+                  {isGuest ? "Gast" : (user?.displayName?.split(" ")[0] ?? "Nutzer")}
                 </span>
                 <button
                   className="userSignOut"

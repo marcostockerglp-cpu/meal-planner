@@ -107,7 +107,7 @@ function mapApiRecipesToUiRecipes(recipes: Awaited<ReturnType<typeof requestMeal
 }
 
 export default function App() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, isGuest, loading: authLoading } = useAuth();
 
   if (authLoading) {
     return (
@@ -117,7 +117,7 @@ export default function App() {
     );
   }
 
-  if (!user) return <LoginPage />;
+  if (!user && !isGuest) return <LoginPage />;
 
   return <AuthenticatedApp />;
 }
