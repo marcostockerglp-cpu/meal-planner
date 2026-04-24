@@ -946,6 +946,58 @@ a, button, input, textarea, select { font: inherit; }
   to { transform: rotate(360deg); }
 }
 
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.hamburgerWrap { position: relative; }
+
+.hamburgerBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.hamburgerBtn:hover { background: var(--surface-alt); }
+
+.hamburgerMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 24px rgba(43,43,43,0.12);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.hamburgerItem {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 14px 18px;
+  transition: background 0.12s, color 0.12s;
+  border-bottom: 1px solid var(--border);
+}
+.hamburgerItem:last-child { border-bottom: none; }
+.hamburgerItem:hover { background: var(--surface-alt); color: var(--text-primary); }
+.hamburgerItemActive { color: var(--primary); background: var(--surface-alt); }
+
 .bottomTabBar {
   position: fixed;
   left: 12px;
@@ -964,6 +1016,9 @@ a, button, input, textarea, select { font: inherit; }
 
 .mobileOnly { display: inline-flex; }
 .desktopOnly { display: none; }
+
+/* container without bottom padding now that bottom tab bar is gone */
+.pageWithBottomNav { padding-bottom: 32px; }
 
 @media (min-width: 640px) {
   .heroStats,
