@@ -132,7 +132,7 @@ function AuthenticatedApp() {
   const [preferencesDraft, setPreferencesDraft] = useState<Preferences>(defaultPreferences);
   const [recipeCatalog, setRecipeCatalog] = useState<Recipe[]>([]);
   const [plan, setPlan] = useState<WeekPlan>(() => buildPlanFromRecipes([], 5));
-  const [assistantPrompt, setAssistantPrompt] = useState("Frühlingsküche, familienfreundlich, 5 Menüs, möglichst viel Gemüse.");
+  const [assistantPrompt, setAssistantPrompt] = useState("");
   const [pantryItems, setPantryItems] = useState<Record<string, boolean>>({ Salz: true, Pfeffer: true, Olivenöl: true });
   const [savedWeeks, setSavedWeeks] = useState<SavedWeek[]>(() => {
     try { return JSON.parse(localStorage.getItem("meal-planner-saved-weeks") ?? "[]"); } catch { return []; }
