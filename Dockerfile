@@ -10,6 +10,7 @@ COPY apps/web/package.json ./apps/web/
 
 RUN npm ci --workspace=apps/api
 
+ARG CACHEBUST=4
 COPY apps/api/src ./apps/api/src
 COPY apps/api/tsconfig.json ./apps/api/
 
