@@ -41,12 +41,11 @@ export type Preferences = {
   variety: boolean;
 };
 
+export type SavedRecipe = Omit<Recipe, "icon">;
+
 export type SavedWeekEntry = {
   day: string;
-  recipeId: string;
-  recipeTitle: string;
-  category: Category;
-  time: number;
+  recipe: SavedRecipe;
 };
 
 export type SavedWeek = {

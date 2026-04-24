@@ -962,6 +962,17 @@ a, button, input, textarea, select { font: inherit; }
   border-bottom: 1px solid var(--border);
 }
 
+.savedWeekToggle {
+  width: 100%;
+  background: var(--surface-alt);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+  color: var(--text-primary);
+}
+.savedWeekToggle:hover { background: #f5ede6; }
+
 .savedWeekLabel {
   font-family: Poppins, sans-serif;
   font-size: 15px;
@@ -989,6 +1000,16 @@ a, button, input, textarea, select { font: inherit; }
   flex-wrap: wrap;
 }
 .savedWeekEntry:last-child { border-bottom: none; }
+
+.savedWeekEntryBtn {
+  width: 100%;
+  background: var(--surface);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+}
+.savedWeekEntryBtn:hover { background: var(--surface-alt); }
 
 .savedWeekDay {
   font-size: 12px;

@@ -1,9 +1,9 @@
-import { BookOpen, CalendarDays, Save, Timer, Trash2, Utensils } from "lucide-react";
+import { BookOpen, CalendarDays, ChevronDown, ChevronUp, Save, Timer, Trash2, Utensils } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { CATEGORY_LABELS } from "../data";
 import { normalizeNumber } from "../lib/planner";
-import type { Recipe, SavedWeek } from "../types";
+import type { Recipe, SavedRecipe, SavedWeek } from "../types";
 
 type Props = {
   plannedRecipes: Array<{ day: string; recipe: Recipe }>;
@@ -13,6 +13,7 @@ type Props = {
   onSaveWeek: () => void;
   savedWeeks: SavedWeek[];
   onDeleteSavedWeek: (id: string) => void;
+  onShowSavedRecipe: (recipe: SavedRecipe) => void;
 };
 
 export function RecipesPage({
@@ -23,8 +24,10 @@ export function RecipesPage({
   onSaveWeek,
   savedWeeks,
   onDeleteSavedWeek,
+  onShowSavedRecipe,
 }: Props) {
   const [saved, setSaved] = useState(false);
+  const [openWeekId, setOpenWeekId] = useState<string | null>(null);
 
   const handleSave = () => {
     onSaveWeek();
@@ -90,9 +93,11 @@ export function RecipesPage({
                   </div>
                   <div className="buttonGrid">
                     <select className="select" defaultValue={day} onChange={(e) => e.target.value && handleAssignRecipe(e.target.value, recipe.id)}>
-                      {activeDays.map((dayOption) => <option key={dayOption} value={dayOption}>{dayOption}</option>)}
+                      {activeDays.map((d) => <option key={d} value={d}>{d}</option>)}
                     </select>
-                    <button className="button buttonGhost" onClick={() => setActiveRecipeId(recipe.id)}><BookOpen size={16} /> Details</button>
+                    <button className="button buttonGhost" onClick={() => setActiveRecipeId(recipe.id)}>
+                      <BookOpen size={16} /> Details
+                    </button>
                   </div>
                 </div>
               );
@@ -106,40 +111,59 @@ export function RecipesPage({
         <section className="panel">
           <div className="panelHeader">
             <div className="panelTitle">Gespeicherte Wochen</div>
-            <div className="panelText">Dein Archiv gespeicherter Wochenpläne.</div>
+            <div className="panelText">Dein Archiv gespeicherter Wochenpläne. Klicke auf ein Rezept für die Detailansicht.</div>
           </div>
           <div className="stack">
-            {savedWeeks.map((week) => (
-              <div key={week.id} className="savedWeekCard">
-                <div className="savedWeekHeader">
-                  <div>
-                    <div className="savedWeekLabel">{week.label}</div>
-                    <div className="savedWeekDate">
-                      {new Date(week.savedAt).toLocaleDateString("de-CH", { day: "2-digit", month: "2-digit", year: "numeric" })}
-                    </div>
-                  </div>
+            {savedWeeks.map((week) => {
+              const isOpen = openWeekId === week.id;
+              return (
+                <div key={week.id} className="savedWeekCard">
                   <button
-                    className="userSignOut"
-                    onClick={() => onDeleteSavedWeek(week.id)}
-                    aria-label="Woche löschen"
-                    title="Woche löschen"
+                    className="savedWeekHeader savedWeekToggle"
+                    onClick={() => setOpenWeekId(isOpen ? null : week.id)}
                   >
-                    <Trash2 size={15} />
-                  </button>
-                </div>
-                <div className="savedWeekEntries">
-                  {week.entries.map((entry) => (
-                    <div key={`${week.id}-${entry.day}`} className="savedWeekEntry">
-                      <span className="savedWeekDay">{entry.day}</span>
-                      <span className="savedWeekTitle">{entry.recipeTitle}</span>
-                      <span className={`mealChip mealChip--${entry.category}`} style={{ fontSize: 11, padding: "3px 8px", minHeight: "unset" }}>
-                        {CATEGORY_LABELS[entry.category]}
-                      </span>
+                    <div>
+                      <div className="savedWeekLabel">{week.label}</div>
+                      <div className="savedWeekDate">
+                        Gespeichert am {new Date(week.savedAt).toLocaleDateString("de-CH", { day: "2-digit", month: "2-digit", year: "numeric" })} · {week.entries.length} Rezepte
+                      </div>
                     </div>
-                  ))}
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                      <button
+                        className="userSignOut"
+                        onClick={(e) => { e.stopPropagation(); onDeleteSavedWeek(week.id); }}
+                        aria-label="Woche löschen"
+                        title="Woche löschen"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  </button>
+
+                  {isOpen && (
+                    <div className="savedWeekEntries">
+                      {week.entries.map((entry) => (
+                        <button
+                          key={`${week.id}-${entry.day}`}
+                          className="savedWeekEntry savedWeekEntryBtn"
+                          onClick={() => onShowSavedRecipe(entry.recipe)}
+                        >
+                          <span className="savedWeekDay">{entry.day}</span>
+                          <span className="savedWeekTitle">{entry.recipe.title}</span>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                            <span className={`mealChip mealChip--${entry.recipe.category}`} style={{ fontSize: 11, padding: "3px 8px", minHeight: "unset" }}>
+                              {CATEGORY_LABELS[entry.recipe.category]}
+                            </span>
+                            <BookOpen size={14} style={{ color: "var(--text-secondary)", flexShrink: 0 }} />
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}

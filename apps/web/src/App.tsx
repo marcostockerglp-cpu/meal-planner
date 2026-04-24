@@ -15,6 +15,7 @@ import { requestMealPlan } from "./services/mealPlanApi";
 import { getISOWeek, kwLabel } from "./lib/week";
 import type { Preferences, Recipe, SavedWeek, WeekPlan } from "./types";
 
+
 const defaultPreferences: Preferences = {
   season: "Frühling",
   mood: "",
@@ -138,6 +139,7 @@ function AuthenticatedApp() {
   });
   const [shoppingDiff, setShoppingDiff] = useState<{ day: string; fromRecipe: Recipe | null; toRecipe: Recipe | null; changes: ReturnType<typeof buildShoppingDiff> } | null>(null);
   const [activeRecipeId, setActiveRecipeId] = useState<string | null>(null);
+  const [activeSavedRecipe, setActiveSavedRecipe] = useState<Recipe | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatingDay, setGeneratingDay] = useState<string | null>(null);
   const [generationError, setGenerationError] = useState<string>("");
@@ -288,19 +290,20 @@ function AuthenticatedApp() {
       year,
       label: kwLabel(kw, year),
       savedAt: new Date().toISOString(),
-      entries: plannedRecipes.map(({ day, recipe }) => ({
-        day,
-        recipeId: recipe.id,
-        recipeTitle: recipe.title,
-        category: recipe.category,
-        time: recipe.time,
-      })),
+      entries: plannedRecipes.map(({ day, recipe }) => {
+        const { icon: _icon, ...rest } = recipe;
+        return { day, recipe: rest };
+      }),
     };
     setSavedWeeks((prev) => {
-      const updated = [newWeek, ...prev.filter((w) => w.id !== newWeek.id)];
+      const updated = [newWeek, ...prev.filter((w) => !(w.kw === kw && w.year === year))];
       localStorage.setItem("meal-planner-saved-weeks", JSON.stringify(updated));
       return updated;
     });
+  };
+
+  const handleShowSavedRecipe = (savedRecipe: import("./types").SavedRecipe) => {
+    setActiveSavedRecipe({ ...savedRecipe, icon: CATEGORY_ICONS[savedRecipe.category] });
   };
 
   const handleDeleteSavedWeek = (id: string) => {
@@ -314,6 +317,7 @@ function AuthenticatedApp() {
   return (
     <>
       <RecipeModal recipe={activeRecipe} people={people} onClose={() => setActiveRecipeId(null)} />
+      <RecipeModal recipe={activeSavedRecipe} people={people} onClose={() => setActiveSavedRecipe(null)} />
       <AppLayout>
         <Routes>
           <Route
@@ -340,7 +344,7 @@ function AuthenticatedApp() {
             }
           />
           <Route path="/" element={<PlannerPage mealCount={mealCount} plan={plan} filteredRecipes={filteredRecipes} shoppingDiff={shoppingDiff} summary={summary} handleAssignRecipe={handleAssignRecipe} handleGenerateRecipeForDay={handleGenerateRecipeForDay} generatingDay={generatingDay} setActiveRecipeId={setActiveRecipeId} />} />
-          <Route path="/recipes" element={<RecipesPage plannedRecipes={plannedRecipes} activeDays={activeDays} handleAssignRecipe={handleAssignRecipe} setActiveRecipeId={setActiveRecipeId} onSaveWeek={handleSaveWeek} savedWeeks={savedWeeks} onDeleteSavedWeek={handleDeleteSavedWeek} />} />
+          <Route path="/recipes" element={<RecipesPage plannedRecipes={plannedRecipes} activeDays={activeDays} handleAssignRecipe={handleAssignRecipe} setActiveRecipeId={setActiveRecipeId} onSaveWeek={handleSaveWeek} savedWeeks={savedWeeks} onDeleteSavedWeek={handleDeleteSavedWeek} onShowSavedRecipe={handleShowSavedRecipe} />} />
           <Route path="/shopping" element={<ShoppingPage pantryItems={pantryItems} setPantryItems={(fn) => setPantryItems(fn)} shoppingData={shoppingData} onExport={() => downloadText("wocheneinkauf-coop.txt", exportText)} />} />
           <Route path="*" element={<Navigate to="/start" replace />} />
         </Routes>
