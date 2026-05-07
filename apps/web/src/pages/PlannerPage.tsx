@@ -30,7 +30,7 @@ export function PlannerPage({ mealCount, plan, filteredRecipes, shoppingDiff, su
             <div className="emptyStateIcon"><CalendarDays size={24} /></div>
             <p className="emptyStateTitle">Noch kein Menüplan vorhanden</p>
             <p className="emptyStateText">Generiere zuerst einen Wochenplan auf der Startseite, damit hier deine Menüs erscheinen.</p>
-            <Link to="/start" className="button buttonPrimary" style={{ marginTop: 4 }}>
+            <Link to="/app/start" className="button buttonPrimary" style={{ marginTop: 4 }}>
               <Sparkles size={16} /> Menüplan generieren
             </Link>
           </div>

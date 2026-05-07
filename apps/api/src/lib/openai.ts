@@ -30,21 +30,6 @@ const MealPlanSchema = z.object({
   ),
 });
 
-function extractText(response: any): string {
-  if (typeof response.output_text === "string" && response.output_text.trim()) {
-    return response.output_text.trim();
-  }
-
-  const content = response.output?.flatMap((item: any) => item.content ?? []) ?? [];
-  const texts = content
-    .filter((c: any) => c.type === "output_text" || c.type === "text")
-    .map((c: any) => c.text ?? c.value ?? "")
-    .join("")
-    .trim();
-
-  return texts;
-}
-
 function stripCodeFence(value: string): string {
   return value.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/i, "").trim();
 }
@@ -56,14 +41,16 @@ export async function generateMealPlan(input: { prompt: string; mealCount: numbe
 
   const client = new OpenAI({ apiKey: env.openaiApiKey });
 
-  const response = await client.responses.create({
+  const response = await client.chat.completions.create({
     model: env.openaiModel,
-    input: buildMealPlanPrompt({ prompt: input.prompt, mealCount: input.mealCount }),
+    messages: [
+      { role: "user", content: buildMealPlanPrompt({ prompt: input.prompt, mealCount: input.mealCount }) },
+    ],
     temperature: 0.7,
-    max_output_tokens: 4000,
+    max_tokens: 4000,
   });
 
-  const rawText = stripCodeFence(extractText(response));
+  const rawText = stripCodeFence(response.choices[0]?.message?.content ?? "");
   const parsed = JSON.parse(rawText);
   return MealPlanSchema.parse(parsed);
 }

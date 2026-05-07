@@ -5,10 +5,10 @@ import { LogOut, Menu, X } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 const NAV_ITEMS = [
-  { to: "/start", label: "Start" },
-  { to: "/", label: "Wochenplan" },
-  { to: "/recipes", label: "Rezepte" },
-  { to: "/shopping", label: "Einkauf" },
+  { to: "/app/start", label: "Start" },
+  { to: "/app/planner", label: "Wochenplan" },
+  { to: "/app/recipes", label: "Rezepte" },
+  { to: "/app/shopping", label: "Einkauf" },
 ] as const;
 
 type Props = {
@@ -47,7 +47,6 @@ export function AppLayout({ children }: Props) {
                 <NavLink
                   key={item.to}
                   to={item.to}
-                  end={item.to === "/" || item.to === "/start"}
                   className={({ isActive }) => `plannerNavLink ${isActive ? "plannerNavLinkActive" : ""}`}
                 >
                   {item.label}
@@ -72,7 +71,6 @@ export function AppLayout({ children }: Props) {
                       <NavLink
                         key={item.to}
                         to={item.to}
-                        end={item.to === "/" || item.to === "/start"}
                         className={({ isActive }) => `hamburgerItem ${isActive ? "hamburgerItemActive" : ""}`}
                         onClick={() => setMenuOpen(false)}
                       >

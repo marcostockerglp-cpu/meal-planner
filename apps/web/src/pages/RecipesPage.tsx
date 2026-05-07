@@ -64,7 +64,7 @@ export function RecipesPage({
             <div className="emptyStateIcon"><Utensils size={24} /></div>
             <p className="emptyStateTitle">Noch keine Rezepte geplant</p>
             <p className="emptyStateText">Generiere zuerst einen Menüplan auf der Startseite.</p>
-            <Link to="/start" className="button buttonPrimary" style={{ marginTop: 4 }}>Zur Startseite</Link>
+            <Link to="/app/start" className="button buttonPrimary" style={{ marginTop: 4 }}>Zur Startseite</Link>
           </div>
         ) : (
           <div className="recipeGrid">

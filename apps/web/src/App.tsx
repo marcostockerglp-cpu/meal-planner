@@ -3,6 +3,9 @@ import { AlertCircle, Beef, Fish, Leaf, Loader2 } from "lucide-react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import { LoginPage } from "./pages/LoginPage";
+import { LandingPage } from "./pages/LandingPage";
+import { BlogPage } from "./pages/BlogPage";
+import { BlogPostPage } from "./pages/BlogPostPage";
 import { DAYS } from "./data";
 import { AppLayout } from "./components/AppLayout";
 import { RecipeModal } from "./components/RecipeModal";
@@ -14,7 +17,6 @@ import { buildShoppingDiff, normalizeNumber, recipeScore, scaleQty } from "./lib
 import { requestMealPlan } from "./services/mealPlanApi";
 import { getISOWeek, kwLabel } from "./lib/week";
 import type { Preferences, Recipe, SavedWeek, WeekPlan } from "./types";
-
 
 const defaultPreferences: Preferences = {
   season: "Frühling",
@@ -109,6 +111,27 @@ function mapApiRecipesToUiRecipes(recipes: Awaited<ReturnType<typeof requestMeal
 }
 
 export default function App() {
+  return (
+    <Routes>
+      {/* Public website */}
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/blog" element={<BlogPage />} />
+      <Route path="/blog/:slug" element={<BlogPostPage />} />
+
+      {/* Planner app (auth-gated) */}
+      <Route path="/app/*" element={<AppSection />} />
+
+      {/* Legacy redirects */}
+      <Route path="/start" element={<Navigate to="/app/start" replace />} />
+      <Route path="/recipes" element={<Navigate to="/app/recipes" replace />} />
+      <Route path="/shopping" element={<Navigate to="/app/shopping" replace />} />
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+function AppSection() {
   const { user, isGuest, loading: authLoading } = useAuth();
 
   if (authLoading) {
@@ -321,7 +344,7 @@ function AuthenticatedApp() {
       <AppLayout>
         <Routes>
           <Route
-            path="/start"
+            path="start"
             element={
               <StartPage
                 mealCountDraft={mealCountDraft}
@@ -343,10 +366,10 @@ function AuthenticatedApp() {
               />
             }
           />
-          <Route path="/" element={<PlannerPage mealCount={mealCount} plan={plan} filteredRecipes={filteredRecipes} shoppingDiff={shoppingDiff} summary={summary} handleAssignRecipe={handleAssignRecipe} handleGenerateRecipeForDay={handleGenerateRecipeForDay} generatingDay={generatingDay} setActiveRecipeId={setActiveRecipeId} />} />
-          <Route path="/recipes" element={<RecipesPage plannedRecipes={plannedRecipes} activeDays={activeDays} handleAssignRecipe={handleAssignRecipe} setActiveRecipeId={setActiveRecipeId} onSaveWeek={handleSaveWeek} savedWeeks={savedWeeks} onDeleteSavedWeek={handleDeleteSavedWeek} onShowSavedRecipe={handleShowSavedRecipe} />} />
-          <Route path="/shopping" element={<ShoppingPage pantryItems={pantryItems} setPantryItems={(fn) => setPantryItems(fn)} shoppingData={shoppingData} onExport={() => downloadText("wocheneinkauf-coop.txt", exportText)} />} />
-          <Route path="*" element={<Navigate to="/start" replace />} />
+          <Route path="planner" element={<PlannerPage mealCount={mealCount} plan={plan} filteredRecipes={filteredRecipes} shoppingDiff={shoppingDiff} summary={summary} handleAssignRecipe={handleAssignRecipe} handleGenerateRecipeForDay={handleGenerateRecipeForDay} generatingDay={generatingDay} setActiveRecipeId={setActiveRecipeId} />} />
+          <Route path="recipes" element={<RecipesPage plannedRecipes={plannedRecipes} activeDays={activeDays} handleAssignRecipe={handleAssignRecipe} setActiveRecipeId={setActiveRecipeId} onSaveWeek={handleSaveWeek} savedWeeks={savedWeeks} onDeleteSavedWeek={handleDeleteSavedWeek} onShowSavedRecipe={handleShowSavedRecipe} />} />
+          <Route path="shopping" element={<ShoppingPage pantryItems={pantryItems} setPantryItems={(fn) => setPantryItems(fn)} shoppingData={shoppingData} onExport={() => downloadText("wocheneinkauf-coop.txt", exportText)} />} />
+          <Route path="*" element={<Navigate to="/app/start" replace />} />
         </Routes>
       </AppLayout>
 

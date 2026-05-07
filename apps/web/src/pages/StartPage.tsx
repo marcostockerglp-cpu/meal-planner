@@ -100,32 +100,31 @@ export function StartPage({
           Beschreibe Saison, Stimmung und Wünsche. Der Assistent ist die inhaltliche Quelle für deine Rezepte.
         </p>
 
-        <textarea
-          className="textarea"
-          value={assistantPrompt}
-          onChange={(e) => setAssistantPrompt(e.target.value)}
-          placeholder="Zum Beispiel: Frühlingsküche, 5 Menüs, familienfreundlich, 2 vegetarische Menüs, max 30 Minuten"
-        />
-
-        <div className="chipRow">
-          {["Frühlingsküche", "vegetarisch", "2 vegetarische Menüs", "max 30 Minuten", "familienfreundlich", "gemütlich", "5 Menüs"].map((tag) => (
-            <button key={tag} className="chip softChip" onClick={() => setAssistantPrompt((prev) => (prev ? `${prev} · ${tag}` : tag))}>
-              {tag}
-            </button>
-          ))}
-        </div>
-
-        {generationError && (
-          <div className="errorBanner">
-            <AlertCircle size={16} />
-            <span>{generationError}</span>
+        <div className="assistantBox">
+          <textarea
+            className="assistantTextarea"
+            value={assistantPrompt}
+            onChange={(e) => setAssistantPrompt(e.target.value)}
+            placeholder="Zum Beispiel: Frühlingsküche, 5 Menüs, familienfreundlich, 2 vegetarische Menüs, max 30 Minuten"
+          />
+          <div className="assistantChips">
+            {["Frühlingsküche", "vegetarisch", "2 vegetarische Menüs", "max 30 Minuten", "familienfreundlich", "gemütlich", "5 Menüs"].map((tag) => (
+              <button key={tag} className="chip softChip" onClick={() => setAssistantPrompt((prev) => (prev ? `${prev} · ${tag}` : tag))}>
+                {tag}
+              </button>
+            ))}
           </div>
-        )}
-
-        <div className="buttonGrid">
-          <button className="button buttonPrimary" onClick={handleGeneratePlan} disabled={isGenerating}>
-            <Sparkles size={16} /> Mit Assistent planen
-          </button>
+          {generationError && (
+            <div className="assistantError">
+              <AlertCircle size={15} />
+              <span>{generationError}</span>
+            </div>
+          )}
+          <div className="assistantActions">
+            <button className="button buttonPrimary assistantBtn" onClick={handleGeneratePlan} disabled={isGenerating}>
+              <Sparkles size={16} /> Mit Assistent planen
+            </button>
+          </div>
         </div>
       </div>
 

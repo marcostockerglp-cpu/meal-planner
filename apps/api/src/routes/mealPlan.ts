@@ -5,7 +5,7 @@ import { generateMealPlan } from "../lib/openai.js";
 const router = Router();
 
 const MealPlanRequestSchema = z.object({
-  prompt: z.string().min(1),
+  prompt: z.string(),
   mealCount: z.number().int().min(1).max(7),
   userId: z.string().optional(),
 });
