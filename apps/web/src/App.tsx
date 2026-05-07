@@ -147,14 +147,42 @@ function AppSection() {
   return <AuthenticatedApp />;
 }
 
+function loadPersistedRecipes(): Recipe[] {
+  try {
+    const raw = localStorage.getItem("meal-planner-catalog");
+    if (!raw) return [];
+    const saved: Array<Omit<Recipe, "icon">> = JSON.parse(raw);
+    return saved.map((r) => ({ ...r, icon: CATEGORY_ICONS[r.category] }));
+  } catch { return []; }
+}
+
+function saveRecipesToStorage(recipes: Recipe[]) {
+  const serializable = recipes.map(({ icon: _icon, ...rest }) => rest);
+  localStorage.setItem("meal-planner-catalog", JSON.stringify(serializable));
+}
+
+function loadPersistedPlan(): WeekPlan | null {
+  try {
+    const raw = localStorage.getItem("meal-planner-plan");
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
 function AuthenticatedApp() {
-  const [people, setPeople] = useState(4);
-  const [mealCount, setMealCount] = useState(5);
-  const [mealCountDraft, setMealCountDraft] = useState(5);
+  const [people, setPeople] = useState<number>(() => {
+    const v = localStorage.getItem("meal-planner-people");
+    return v ? Number(v) : 4;
+  });
+  const persistedMealCount = (() => {
+    const v = localStorage.getItem("meal-planner-meal-count");
+    return v ? Number(v) : 5;
+  })();
+  const [mealCount, setMealCount] = useState(persistedMealCount);
+  const [mealCountDraft, setMealCountDraft] = useState(persistedMealCount);
   const [preferences, setPreferences] = useState<Preferences>(defaultPreferences);
   const [preferencesDraft, setPreferencesDraft] = useState<Preferences>(defaultPreferences);
-  const [recipeCatalog, setRecipeCatalog] = useState<Recipe[]>([]);
-  const [plan, setPlan] = useState<WeekPlan>(() => buildPlanFromRecipes([], 5));
+  const [recipeCatalog, setRecipeCatalog] = useState<Recipe[]>(() => loadPersistedRecipes());
+  const [plan, setPlan] = useState<WeekPlan>(() => loadPersistedPlan() ?? buildPlanFromRecipes([], persistedMealCount));
   const [assistantPrompt, setAssistantPrompt] = useState("");
   const [pantryItems, setPantryItems] = useState<Record<string, boolean>>({ Salz: true, Pfeffer: true, Olivenöl: true });
   const [savedWeeks, setSavedWeeks] = useState<SavedWeek[]>(() => {
@@ -173,6 +201,11 @@ function AuthenticatedApp() {
     const t = setTimeout(() => setGenerationDayError(""), 4000);
     return () => clearTimeout(t);
   }, [generationDayError]);
+
+  useEffect(() => { saveRecipesToStorage(recipeCatalog); }, [recipeCatalog]);
+  useEffect(() => { localStorage.setItem("meal-planner-plan", JSON.stringify(plan)); }, [plan]);
+  useEffect(() => { localStorage.setItem("meal-planner-meal-count", String(mealCount)); }, [mealCount]);
+  useEffect(() => { localStorage.setItem("meal-planner-people", String(people)); }, [people]);
 
   const activeDays = useMemo(() => DAYS.slice(0, mealCount), [mealCount]);
   const activeRecipe = recipeCatalog.find((r) => r.id === activeRecipeId) || null;
