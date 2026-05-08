@@ -9,20 +9,20 @@ const MealPlanSchema = z.object({
     z.object({
       id: z.string(),
       title: z.string(),
-      source: z.string(),
-      season: z.array(z.string()),
-      mood: z.array(z.string()),
+      source: z.string().optional().default("ChatGPT"),
+      season: z.array(z.string()).optional().default([]),
+      mood: z.array(z.string()).optional().default([]),
       time: z.number(),
       category: z.enum(["vegetarisch", "fleisch", "fisch"]),
-      portions: z.number(),
-      coopMatch: z.enum(["hoch", "mittel"]),
-      description: z.string(),
+      portions: z.number().optional().default(4),
+      coopMatch: z.enum(["hoch", "mittel"]).optional().default("mittel"),
+      description: z.string().optional().default(""),
       ingredients: z.array(
         z.object({
           name: z.string(),
           qty: z.number(),
-          unit: z.string(),
-          coop: z.string(),
+          unit: z.string().optional().default(""),
+          coop: z.string().optional().default(""),
         })
       ),
       steps: z.array(z.string()).min(2),
