@@ -1,15 +1,19 @@
-import { Check, ClipboardList, Download, Plus, ShoppingCart, ShoppingBag } from "lucide-react";
+import { BookOpen, Check, ClipboardList, Download, Plus, ShoppingCart, ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import { normalizeNumber } from "../lib/planner";
+import { generateCookbookPDF } from "../lib/pdfExport";
+import type { Recipe } from "../types";
 
 type Props = {
   pantryItems: Record<string, boolean>;
   setPantryItems: (fn: (prev: Record<string, boolean>) => Record<string, boolean>) => void;
   shoppingData: Array<{ name: string; unit: string; totalQty: number; coop: string; usedIn: Array<{ recipeId: string; recipeTitle: string; qty: number; unit: string; day: string }> }>;
   onExport: () => void;
+  plannedRecipes: Array<{ day: string; recipe: Recipe }>;
+  people: number;
 };
 
-export function ShoppingPage({ pantryItems, setPantryItems, shoppingData, onExport }: Props) {
+export function ShoppingPage({ pantryItems, setPantryItems, shoppingData, onExport, plannedRecipes, people }: Props) {
   const [newPantryItem, setNewPantryItem] = useState("");
 
   const handleAddPantryItem = () => {
@@ -71,7 +75,10 @@ export function ShoppingPage({ pantryItems, setPantryItems, shoppingData, onExpo
             <div className="panelTitle"><Check size={18} /> Zuordnung bleibt erhalten</div>
             <div className="panelText">Jede Zutat zeigt, für welche Gerichte sie gebraucht wird — auch nach der Zusammenführung.</div>
           </div>
-          <button className="button buttonPrimary" onClick={onExport} disabled={shoppingData.length === 0}><Download size={16} /> Einkaufsliste exportieren</button>
+          <button className="button buttonPrimary" onClick={() => generateCookbookPDF(plannedRecipes, shoppingData, people)} disabled={plannedRecipes.length === 0}>
+            <BookOpen size={16} /> Als Kochbuch-PDF exportieren
+          </button>
+          <button className="button buttonGhost" onClick={onExport} disabled={shoppingData.length === 0}><Download size={16} /> Als Text exportieren</button>
         </div>
       </div>
 

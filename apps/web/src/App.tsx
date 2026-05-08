@@ -401,7 +401,7 @@ function AuthenticatedApp() {
           />
           <Route path="planner" element={<PlannerPage mealCount={mealCount} plan={plan} filteredRecipes={filteredRecipes} shoppingDiff={shoppingDiff} summary={summary} handleAssignRecipe={handleAssignRecipe} handleGenerateRecipeForDay={handleGenerateRecipeForDay} generatingDay={generatingDay} setActiveRecipeId={setActiveRecipeId} />} />
           <Route path="recipes" element={<RecipesPage plannedRecipes={plannedRecipes} activeDays={activeDays} handleAssignRecipe={handleAssignRecipe} setActiveRecipeId={setActiveRecipeId} onSaveWeek={handleSaveWeek} savedWeeks={savedWeeks} onDeleteSavedWeek={handleDeleteSavedWeek} onShowSavedRecipe={handleShowSavedRecipe} shoppingData={shoppingData} people={people} />} />
-          <Route path="shopping" element={<ShoppingPage pantryItems={pantryItems} setPantryItems={(fn) => setPantryItems(fn)} shoppingData={shoppingData} onExport={() => downloadText("wocheneinkauf-coop.txt", exportText)} />} />
+          <Route path="shopping" element={<ShoppingPage pantryItems={pantryItems} setPantryItems={(fn) => setPantryItems(fn)} shoppingData={shoppingData} onExport={() => downloadText("wocheneinkauf-coop.txt", exportText)} plannedRecipes={plannedRecipes} people={people} />} />
           <Route path="*" element={<Navigate to="/app/start" replace />} />
         </Routes>
       </AppLayout>

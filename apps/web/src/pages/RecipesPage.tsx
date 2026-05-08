@@ -59,23 +59,22 @@ export function RecipesPage({
           </div>
           <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
             <div className="previewCountBadge"><CalendarDays size={16} /> {plannedRecipes.length} geplante Rezepte</div>
+            <button
+              className="button buttonGhost"
+              onClick={() => generateCookbookPDF(plannedRecipes, shoppingData, people)}
+              disabled={plannedRecipes.length === 0}
+            >
+              <Download size={16} /> Als PDF exportieren
+            </button>
             {plannedRecipes.length > 0 && (
-              <>
-                <button
-                  className="button buttonGhost"
-                  onClick={() => generateCookbookPDF(plannedRecipes, shoppingData, people)}
-                >
-                  <Download size={16} /> Als PDF exportieren
-                </button>
-                <button
-                  className={`button ${saved ? "buttonSuccess" : "buttonPrimary"}`}
-                  onClick={handleSave}
-                  disabled={saved}
-                >
-                  <Save size={16} />
-                  {saved ? "Gespeichert ✓" : "Woche speichern"}
-                </button>
-              </>
+              <button
+                className={`button ${saved ? "buttonSuccess" : "buttonPrimary"}`}
+                onClick={handleSave}
+                disabled={saved}
+              >
+                <Save size={16} />
+                {saved ? "Gespeichert ✓" : "Woche speichern"}
+              </button>
             )}
           </div>
         </div>
