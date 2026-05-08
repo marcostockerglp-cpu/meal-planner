@@ -1,9 +1,18 @@
-import { BookOpen, CalendarDays, ChevronDown, ChevronUp, Save, Timer, Trash2, Utensils } from "lucide-react";
+import { BookOpen, CalendarDays, ChevronDown, ChevronUp, Download, Save, Timer, Trash2, Utensils } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { CATEGORY_LABELS } from "../data";
 import { normalizeNumber } from "../lib/planner";
+import { generateCookbookPDF } from "../lib/pdfExport";
 import type { Recipe, SavedRecipe, SavedWeek } from "../types";
+
+type ShoppingItem = {
+  name: string;
+  unit: string;
+  totalQty: number;
+  coop: string;
+  usedIn: Array<{ recipeId: string; recipeTitle: string; qty: number; unit: string; day: string }>;
+};
 
 type Props = {
   plannedRecipes: Array<{ day: string; recipe: Recipe }>;
@@ -14,6 +23,8 @@ type Props = {
   savedWeeks: SavedWeek[];
   onDeleteSavedWeek: (id: string) => void;
   onShowSavedRecipe: (recipe: SavedRecipe) => void;
+  shoppingData: ShoppingItem[];
+  people: number;
 };
 
 export function RecipesPage({
@@ -25,6 +36,8 @@ export function RecipesPage({
   savedWeeks,
   onDeleteSavedWeek,
   onShowSavedRecipe,
+  shoppingData,
+  people,
 }: Props) {
   const [saved, setSaved] = useState(false);
   const [openWeekId, setOpenWeekId] = useState<string | null>(null);
@@ -47,14 +60,22 @@ export function RecipesPage({
           <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
             <div className="previewCountBadge"><CalendarDays size={16} /> {plannedRecipes.length} geplante Rezepte</div>
             {plannedRecipes.length > 0 && (
-              <button
-                className={`button ${saved ? "buttonSuccess" : "buttonPrimary"}`}
-                onClick={handleSave}
-                disabled={saved}
-              >
-                <Save size={16} />
-                {saved ? "Gespeichert ✓" : "Woche speichern"}
-              </button>
+              <>
+                <button
+                  className="button buttonGhost"
+                  onClick={() => generateCookbookPDF(plannedRecipes, shoppingData, people)}
+                >
+                  <Download size={16} /> Als PDF exportieren
+                </button>
+                <button
+                  className={`button ${saved ? "buttonSuccess" : "buttonPrimary"}`}
+                  onClick={handleSave}
+                  disabled={saved}
+                >
+                  <Save size={16} />
+                  {saved ? "Gespeichert ✓" : "Woche speichern"}
+                </button>
+              </>
             )}
           </div>
         </div>
