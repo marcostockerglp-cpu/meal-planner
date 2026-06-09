@@ -5,9 +5,18 @@ import { mealPlanRouter } from "./routes/mealPlan.js";
 
 const app = express();
 
+const allowedOrigins = env.allowedOrigin.split(",").map((o) => o.trim());
+
 app.use(
   cors({
-    origin: env.allowedOrigin,
+    origin: (origin, callback) => {
+      // allow server-to-server requests (no origin) and listed origins
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed`));
+      }
+    },
     credentials: true,
   })
 );
